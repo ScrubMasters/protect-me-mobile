@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:protect_me_mobile/models/user.dart';
+import 'package:protect_me_mobile/pages/home_page/widgets/alert_button.dart';
 import 'package:protect_me_mobile/pages/home_page/widgets/microphone_btn.dart';
+import 'package:protect_me_mobile/pages/home_page/widgets/user_displayd.dart';
 import 'package:protect_me_mobile/services/alert_service.dart';
 import 'package:protect_me_mobile/services/geolocator_service.dart';
 
@@ -22,30 +24,15 @@ class _HomePageState extends State<HomePage> {
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: <Widget>[
+                UserDisplay(widget.user),
                 MicrophoneButton(),
-                Padding(padding: EdgeInsets.only(top: 40)),
-                Text(widget.user.username, style: TextStyle(fontSize: 50),),
                 Padding(padding: EdgeInsets.only(top: 40)),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: <Widget>[
-                    RaisedButton(
-                      color: Colors.greenAccent,
-                      onPressed: () => _createAlert("LOW"),
-                      child: Text("Low"),
-                    ),
-                    Padding(padding: EdgeInsets.symmetric(horizontal: 10),),
-                    RaisedButton(
-                      color: Colors.blueAccent,
-                      onPressed: () => _createAlert("MEDIUM"),
-                      child: Text("Medium"),
-                    ),
-                    Padding(padding: EdgeInsets.symmetric(horizontal: 10),),
-                    RaisedButton(
-                      color: Colors.amberAccent,
-                      onPressed: () => _createAlert("HIGH"),
-                      child: Text("High"),
-                    ),
+                    AlertButton("LOW", () { _createAlert("LOW", context); }),
+                    AlertButton("MEDIUM", () { _createAlert("LOW", context); }),
+                    AlertButton("HIGH", () { _createAlert("LOW", context); }),
                   ],
                 )
               ],
@@ -53,19 +40,18 @@ class _HomePageState extends State<HomePage> {
           );
         },
       ) 
-      
     );
   }
 
-  void _createAlert(String severity) {
+  void _createAlert(String severity, BuildContext context) {
     GeolocatorService().getPosition().then(
       (geolocation) {
         AlertService().create({
-          "severiry": severity,
+          "severity": severity,
           "createdBy": widget.user.id,
-          "latitude": geolocation.latitude,
-          "longitude": geolocation.longitude
-        }, widget.user.token).then(
+          "latitude": geolocation.latitude.toString(),
+          "longitude": geolocation.longitude.toString()
+        }, widget.user).then(
           (alert) {
             if (alert == null) {
               Scaffold.of(context)

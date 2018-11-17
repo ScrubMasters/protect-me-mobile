@@ -6,15 +6,20 @@ class Alert {
   final String date;
   final User createdBy;
   final GeoLocation location;
+  final String audioUrl;
 
-  Alert({this.severity, this.date, this.createdBy, this.location});
+  Alert({this.severity, this.date, this.createdBy, this.location, this.audioUrl});
 
-  static Alert fromJson(dynamic json) {
+  static Alert fromJson(dynamic json, User user) {
+    print(json);
     return Alert(
       severity: json["severity"],
-      date: json["date"],
-      createdBy: User.fromJson(json["user"], ""),
-      location: GeoLocation("", json["latitude"], json["longitude"])
+      date: json["creation_date"],
+      createdBy: user,
+      location: GeoLocation("", 
+                  json["latitude"],
+                  json["latitude"]),
+      audioUrl: json["audio"]
     );
   }
 }

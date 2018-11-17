@@ -28,7 +28,7 @@ class User {
       lastName: json["lastName"],
       username: json["username"],
       displayName: json["displayName"],
-      avatar: json["userImage"],
+      avatar: json["userImage"].replaceAll("PNG", "png").replaceAll("\\", "/"),
       password: json["password"],
       email: json["email"],
       token: token,
