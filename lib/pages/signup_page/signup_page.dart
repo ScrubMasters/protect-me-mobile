@@ -1,5 +1,6 @@
 
 import 'package:flutter/material.dart';
+import 'package:protect_me_mobile/routing.dart';
 import 'package:protect_me_mobile/services/auth_service.dart';
 import 'package:protect_me_mobile/widgets/text_field.dart';
 
@@ -54,16 +55,19 @@ class _SignupPageState extends State<SignupPage> {
                             if (_formKey.currentState.validate()) {
                               Scaffold.of(context)
                                   .showSnackBar(SnackBar(content: Text('Processing Data')));
-                            AuthService().signUp({
-                              "firstName": firstName,
-                              "lastName": lastName,
-                              "username": username,
-                              "password": password,
-                              "email": email,
-                              "userRole": "Children"
-                            }).then(
-                              (user) => print(user)
-                            );
+                              AuthService().signUp({
+                                "firstName": firstName,
+                                "lastName": lastName,
+                                "username": username,
+                                "password": password,
+                                "email": email,
+                                "userRole": "Children"
+                              }).then(
+                                (user) { 
+                                  Router.params["user"] = user;
+                                  Navigator.of(context).popAndPushNamed("/home_page");
+                                }
+                              );
                             }
                           },
                           color: Colors.redAccent,

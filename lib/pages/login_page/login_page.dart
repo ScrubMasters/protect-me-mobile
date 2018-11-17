@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:protect_me_mobile/routing.dart';
 import 'package:protect_me_mobile/services/auth_service.dart';
 import 'package:protect_me_mobile/widgets/text_field.dart';
 
@@ -43,11 +44,16 @@ class _LoginPageState extends State<LoginPage> {
                           padding: EdgeInsets.all(20),
                           onPressed: () {
                             if (_formKey.currentState.validate()) {
-                              Scaffold.of(context)
-                                  .showSnackBar(SnackBar(content: Text('Login in...')));
+                              
                               AuthService().login(_username, _password).then(
-                                (user) { 
-                                  print(user.username); 
+                                (user) {
+                                  if (user == null) {
+                                    Scaffold.of(context)
+                                      .showSnackBar(SnackBar(content: Text('Invalid account')));
+                                  } else {
+                                    Router.params["user"] = user;
+                                    Navigator.of(context).popAndPushNamed("/home_page"); 
+                                  }
                                 }
                               );
                             }
