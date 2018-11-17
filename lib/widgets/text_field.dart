@@ -12,6 +12,7 @@ class ProtectMeTextField extends StatelessWidget {
     return  Padding(
       padding: EdgeInsets.symmetric(vertical: this.padding),
       child: TextFormField(
+        obscureText: name == "Password",
         decoration: InputDecoration(
           hintText: name
         ),

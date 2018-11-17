@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:protect_me_mobile/services/auth_service.dart';
 import 'package:protect_me_mobile/widgets/text_field.dart';
 
 class LoginPage extends StatefulWidget {
@@ -43,7 +44,8 @@ class _LoginPageState extends State<LoginPage> {
                           onPressed: () {
                             if (_formKey.currentState.validate()) {
                               Scaffold.of(context)
-                                  .showSnackBar(SnackBar(content: Text('Processing Data')));
+                                  .showSnackBar(SnackBar(content: Text('Login in...')));
+                              AuthService().login("test1", "tst");
                             }
                           },
                           color: Colors.redAccent,
