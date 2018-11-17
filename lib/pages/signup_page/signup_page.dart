@@ -1,5 +1,6 @@
 
 import 'package:flutter/material.dart';
+import 'package:protect_me_mobile/services/auth_service.dart';
 import 'package:protect_me_mobile/widgets/text_field.dart';
 
 class SignupPage extends StatefulWidget {
@@ -13,6 +14,7 @@ class _SignupPageState extends State<SignupPage> {
   String firstName;
   String lastName;
   String username;
+  String email;
   String password;
   String password1;
   
@@ -42,8 +44,8 @@ class _SignupPageState extends State<SignupPage> {
                       ProtectMeTextField(name:"First name", onValid: (value) => this.firstName = value),
                       ProtectMeTextField(name: "Last name", onValid: (value) => this.lastName = value),
                       ProtectMeTextField(name: "Username", onValid: (value) => this.username = value),
+                      ProtectMeTextField(name: "Email", onValid: (value) => this.email = value),
                       ProtectMeTextField(name:"Password", onValid: (value) => this.password = value),
-                      ProtectMeTextField(name: "Repeat password", onValid: (value) => this.password1 = value),
                       Padding(
                         padding: EdgeInsets.symmetric(vertical: 30),
                         child: RaisedButton(
@@ -52,6 +54,16 @@ class _SignupPageState extends State<SignupPage> {
                             if (_formKey.currentState.validate()) {
                               Scaffold.of(context)
                                   .showSnackBar(SnackBar(content: Text('Processing Data')));
+                            AuthService().signUp({
+                              "firstName": firstName,
+                              "lastName": lastName,
+                              "username": username,
+                              "password": password,
+                              "email": email,
+                              "userRole": "Children"
+                            }).then(
+                              (user) => print(user)
+                            );
                             }
                           },
                           color: Colors.redAccent,

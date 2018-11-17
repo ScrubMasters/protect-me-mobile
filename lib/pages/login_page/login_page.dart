@@ -45,12 +45,23 @@ class _LoginPageState extends State<LoginPage> {
                             if (_formKey.currentState.validate()) {
                               Scaffold.of(context)
                                   .showSnackBar(SnackBar(content: Text('Login in...')));
-                              AuthService().login("test1", "tst");
+                              AuthService().login(_username, _password).then(
+                                (user) { 
+                                  print(user.username); 
+                                }
+                              );
                             }
                           },
                           color: Colors.redAccent,
                           child: Text('Login', style: TextStyle(color: Colors.white, fontSize: 20, fontFamily: 'Roboto'),),
                         ),
+                      ),
+                      Padding(
+                        padding: EdgeInsets.only(top: 10),
+                        child: InkWell(
+                          onTap: () => Navigator.of(context).pushNamed("/signup_page"),
+                          child: Text("Get an account"),
+                        )
                       ),
                     ],
                   ),
