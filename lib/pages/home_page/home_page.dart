@@ -3,6 +3,7 @@ import 'package:protect_me_mobile/models/user.dart';
 import 'package:protect_me_mobile/pages/home_page/widgets/alert_button.dart';
 import 'package:protect_me_mobile/pages/home_page/widgets/microphone_btn.dart';
 import 'package:protect_me_mobile/pages/home_page/widgets/user_displayd.dart';
+import 'package:protect_me_mobile/routing.dart';
 import 'package:protect_me_mobile/services/alert_service.dart';
 import 'package:protect_me_mobile/services/geolocator_service.dart';
 
@@ -24,7 +25,20 @@ class _HomePageState extends State<HomePage> {
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: <Widget>[
-                UserDisplay(widget.user),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: <Widget>[
+                    UserDisplay(widget.user),
+                    Padding(padding: EdgeInsets.only(left: 10),),
+                    IconButton(
+                      icon: Icon(Icons.chat, size: 40,),
+                      onPressed: () {
+                        Router.params["user"] = widget.user;
+                        Navigator.of(context).pushNamed("/chat_page");
+                      },
+                    ),
+                  ],
+                ),
                 MicrophoneButton((path) {
                   _createAlertAudio(context, path);
                 }),

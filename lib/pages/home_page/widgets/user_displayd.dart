@@ -15,7 +15,7 @@ class _UserDisplayState extends State<UserDisplay> {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: EdgeInsets.all(50),
+      padding: EdgeInsets.symmetric(vertical: 30),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.center,
         children: <Widget>[
@@ -28,7 +28,7 @@ class _UserDisplayState extends State<UserDisplay> {
               image: new DecorationImage(
                 fit: BoxFit.fill,
                 image: NetworkImage(
-                  Environment.BACKEND_URL + "/" + widget.user.avatar,
+                  widget.user.avatar,
                 )
               )
             ),

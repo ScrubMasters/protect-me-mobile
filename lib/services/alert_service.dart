@@ -1,6 +1,6 @@
 import 'dart:io';
 import 'package:async/async.dart';
-import 'package:dio/dio.dart';
+// import 'package:dio/dio.dart';
 import 'package:http_parser/http_parser.dart';
 
 import 'package:protect_me_mobile/environment.dart';
@@ -27,25 +27,25 @@ class AlertService {
   }
 
   Future<Alert> createWithAudio(Map<String, dynamic> alert, User user) async {
-    final audioPath = alert["audioPath"];
-    FormData formData = new FormData.from({
-      "severity": alert["severity"],
-      "createdBy": alert["createdBy"],
-      "latitude": alert["latitude"],
-      "longitude": alert["longitude"],
-      "imageUploads": UploadFileInfo(File(audioPath), "audio_alert.mp4"),
-    });
+    // final audioPath = alert["audioPath"];
+    // FormData formData = new FormData.from({
+    //   "severity": alert["severity"],
+    //   "createdBy": alert["createdBy"],
+    //   "latitude": alert["latitude"],
+    //   "longitude": alert["longitude"],
+    //   "imageUploads": UploadFileInfo(File(audioPath), "audio_alert.mp4"),
+    // });
 
-    final dio = Dio();
-    dio.options.headers = {
-      "Authorization": "Bearer ${user.token}"
-    };
+    // final dio = Dio();
+    // dio.options.headers = {
+    //   "Authorization": "Bearer ${user.token}"
+    // };
 
-    final response = await dio.post(_url + "/audio", data: formData);
+    // final response = await dio.post(_url + "/audio", data: formData);
     
-    if (response.statusCode != 201)
-      return null;
+    // if (response.statusCode != 201)
+    //   return null;
 
-    return Alert.fromJson(response.data["alert"], user);
+    // return Alert.fromJson(response.data["alert"], user);
   }
 }

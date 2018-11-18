@@ -17,7 +17,8 @@ dependencies:
     sdk: flutter
   http: 0.12.0
   dio: 1.0.6
-  geolocator: '^2.1.0'
+  cloud_firestore: ^0.8.2
+  location: ^1.4.1
   flutter_sound: 
   # The following adds the Cupertino Icons font to your application.
   # Use with the CupertinoIcons class for iOS style icons.
