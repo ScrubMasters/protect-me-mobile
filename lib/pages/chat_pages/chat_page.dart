@@ -15,7 +15,7 @@ class ChatPage extends StatefulWidget {
 class _ChatPageState extends State<ChatPage> {
   final _formKey = GlobalKey<FormState>();
   String text = "";
-  User to;
+  List<Message> messages = [];
 
   @override
   void initState() {
@@ -44,7 +44,7 @@ class _ChatPageState extends State<ChatPage> {
   } 
 
   Widget _buildList(BuildContext context, List<DocumentSnapshot> snapshot) {
-    List<Message> messages = snapshot.map((d) => Message.fromSnapshot(d)).toList();
+    messages = snapshot.map((d) => Message.fromSnapshot(d)).toList();
     messages.sort((a, b) => b.date.difference(a.date).isNegative ? -1 : 1);
     messages = messages.where((a) => a.to.username == widget.currentUser.username || a.from.username == widget.currentUser.username).toList();
     return Column(
@@ -66,9 +66,6 @@ class _ChatPageState extends State<ChatPage> {
   }
 
   Widget _buildListItem(BuildContext context, Message msg) {
-    if (msg.from.username != widget.currentUser.username) {
-      to = msg.from;
-    }
     return Padding(
      key: ValueKey(msg.message),
      padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
@@ -108,7 +105,7 @@ class _ChatPageState extends State<ChatPage> {
         ),
         Padding(
           padding: EdgeInsets.symmetric(vertical: 2),
-          child: Text(msg.date.hour.toString() + ":" + msg.date.minute.toString(), style: TextStyle(color: Colors.grey),)
+          child: Text(_formatDate(msg.date), style: TextStyle(color: Colors.grey),)
         ),
       ],
     );
@@ -146,6 +143,7 @@ class _ChatPageState extends State<ChatPage> {
   }
 
   Widget _buildInput() {
+
     return Padding(
       padding: EdgeInsets.only(bottom: 0),
       child:Form(
@@ -172,12 +170,14 @@ class _ChatPageState extends State<ChatPage> {
                   borderRadius: BorderRadius.all(Radius.circular(20)),
                   child: Padding(
                     padding: EdgeInsets.all(20), 
-                    child: Icon(Icons.send, size: 20, color: to != null ? Colors.black : Colors.grey,),
+                    child: Icon(Icons.send, size: 20),
                   ),
                   onTap: () {
-                    if(to == null) return;
-
                     if (_formKey.currentState.validate()) {
+                      User to = messages.firstWhere((m) => m.from.username != widget.currentUser.username).from;
+                      print(to);
+                      if(to == null) return;
+                      print(to.username);
                       Firestore.instance.collection('messages').add({
                         "to": to.toJson(),
                         "from": widget.currentUser.toJson(),
@@ -195,5 +195,17 @@ class _ChatPageState extends State<ChatPage> {
         ),
       )
     );
+  }
+
+  String _formatDate(DateTime date) {
+    String minutes = date.minute.toString();
+    if(minutes.length == 1)
+      minutes = "0" + minutes;
+
+    String hours = date.hour.toString();
+    if(hours.length == 1)
+      hours = "0" + hours;
+
+    return "$hours:$minutes";
   }
 }
