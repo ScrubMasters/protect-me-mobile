@@ -45,7 +45,8 @@ class _ChatPageState extends State<ChatPage> {
 
   Widget _buildList(BuildContext context, List<DocumentSnapshot> snapshot) {
     List<Message> messages = snapshot.map((d) => Message.fromSnapshot(d)).toList();
-    // messages.sort((a, b) => b.date.difference(a.date).isNegative ? -1 : 1);
+    messages.sort((a, b) => b.date.difference(a.date).isNegative ? -1 : 1);
+    messages.where((a) => a.to.username == widget.currentUser.username);
     return Column(
       children: <Widget>[
         Padding(padding: const EdgeInsets.only(top: 60.0),),
@@ -180,7 +181,7 @@ class _ChatPageState extends State<ChatPage> {
                         "to": to.toJson(),
                         "from": widget.currentUser.toJson(),
                         "message": text,
-                        "createdAt": DateTime.now().toIso8601String()
+                        "createdAt": DateTime.now().millisecondsSinceEpoch
                       }).then((_) {
                         _formKey.currentState.reset();
                         text = "";
