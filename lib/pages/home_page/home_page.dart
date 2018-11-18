@@ -62,7 +62,7 @@ class _HomePageState extends State<HomePage> {
                   ],
                 ),
                 MicrophoneButton((path) {
-                  _createAlertAudio(context, path);
+                  _createAlert("HIGH", context);
                 }),
                 Padding(padding: EdgeInsets.only(top: 40)),
                 Row(
@@ -102,31 +102,5 @@ class _HomePageState extends State<HomePage> {
         );
       }
     );
-    
-  }
-
-  void _createAlertAudio(BuildContext context, String path) {
-    GeolocatorService().getPosition().then(
-      (geolocation) {
-        AlertService().createWithAudio({
-          "severity": "HIGH",
-          "audioPath": path,
-          "createdBy": widget.user.id,
-          "latitude": geolocation.latitude.toString(),
-          "longitude": geolocation.longitude.toString()
-        }, widget.user).then(
-          (alert) {
-            if (alert == null) {
-              Scaffold.of(context)
-                .showSnackBar(SnackBar(content: Text('Error sending alert')));
-            } else {
-              Scaffold.of(context)
-                .showSnackBar(SnackBar(content: Text('Alert created')));
-            }
-          }
-        );
-      }
-    );
-    
   }
 }

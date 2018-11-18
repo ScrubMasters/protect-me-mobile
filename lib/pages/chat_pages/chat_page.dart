@@ -49,7 +49,6 @@ class _ChatPageState extends State<ChatPage> {
     messages.where((a) => a.to.username == widget.currentUser.username);
     return Column(
       children: <Widget>[
-        Padding(padding: const EdgeInsets.only(top: 60.0),),
         Flexible(child: 
           ListView(
             reverse: messages.length != 0,
