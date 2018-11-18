@@ -43,10 +43,12 @@ class User {
   }
 
   static User fromDocument(dynamic json) {
-    String urlPhoto = json["photoURL"];
+    String urlPhoto = json["photoURL"].replaceAll("PNG", "png").replaceFirst(RegExp(r'\\'), "/");
     if (!json["photoURL"].startsWith("http")) {
-      urlPhoto = Environment.BACKEND_URL + "/" +  urlPhoto.replaceAll("PNG", "png").replaceAll("\\", "/");
+      urlPhoto = Environment.BACKEND_URL + "/" +  urlPhoto;
     }
+
+    print(urlPhoto);
 
     return User(
       username: json["username"],

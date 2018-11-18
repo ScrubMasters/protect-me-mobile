@@ -46,7 +46,7 @@ class _ChatPageState extends State<ChatPage> {
   Widget _buildList(BuildContext context, List<DocumentSnapshot> snapshot) {
     List<Message> messages = snapshot.map((d) => Message.fromSnapshot(d)).toList();
     messages.sort((a, b) => b.date.difference(a.date).isNegative ? -1 : 1);
-    messages.where((a) => a.to.username == widget.currentUser.username);
+    messages = messages.where((a) => a.to.username == widget.currentUser.username || a.from.username == widget.currentUser.username).toList();
     return Column(
       children: <Widget>[
         Flexible(child: 
@@ -66,7 +66,9 @@ class _ChatPageState extends State<ChatPage> {
   }
 
   Widget _buildListItem(BuildContext context, Message msg) {
-    to = msg.to;
+    if (msg.from.username != widget.currentUser.username) {
+      to = msg.from;
+    }
     return Padding(
      key: ValueKey(msg.message),
      padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),

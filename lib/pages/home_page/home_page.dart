@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:protect_me_mobile/models/message.dart';
 import 'package:protect_me_mobile/models/user.dart';
 import 'package:protect_me_mobile/pages/home_page/widgets/alert_button.dart';
 import 'package:protect_me_mobile/pages/home_page/widgets/microphone_btn.dart';
@@ -24,7 +25,9 @@ class _HomePageState extends State<HomePage> {
     Firestore.instance.collection('messages').snapshots().listen(
       (QuerySnapshot q) {
         setState(() {
-          _notifications =  q.documents.length;
+          print(q.documents);
+          List<Message> messages = q.documents.map((d) => Message.fromSnapshot(d)).toList();
+          _notifications = messages.where((d) => d.to.username.compareTo(widget.user.username) == 0).toList().length;
         });
       }
     );
@@ -72,7 +75,24 @@ class _HomePageState extends State<HomePage> {
                     AlertButton("MEDIUM", () { _createAlert("MEDIUM", context); }),
                     AlertButton("HIGH", () { _createAlert("HIGH", context); }),
                   ],
+                ),
+                Padding(
+                  padding: EdgeInsets.fromLTRB(20, 50, 20, 20),
+                  child: RaisedButton(
+                    onPressed: () {},
+                    color: Colors.red,
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: <Widget>[
+                        Padding(padding: EdgeInsets.symmetric(vertical: 30),),
+                        Text("Emergency call", style: TextStyle(color: Colors.white, fontSize: 30),),
+                        Padding(padding: EdgeInsets.only(right: 10),),
+                        Icon(Icons.call, size: 30, color: Colors.white,)
+                      ],
+                    ),
+                  ),
                 )
+                ,
               ],
             ),
           );
