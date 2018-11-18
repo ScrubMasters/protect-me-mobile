@@ -8,6 +8,7 @@ import 'package:protect_me_mobile/pages/home_page/widgets/user_displayd.dart';
 import 'package:protect_me_mobile/routing.dart';
 import 'package:protect_me_mobile/services/alert_service.dart';
 import 'package:protect_me_mobile/services/geolocator_service.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class HomePage extends StatefulWidget {
   final User user;
@@ -79,7 +80,10 @@ class _HomePageState extends State<HomePage> {
                 Padding(
                   padding: EdgeInsets.fromLTRB(20, 50, 20, 20),
                   child: RaisedButton(
-                    onPressed: () {},
+                    onPressed: () {
+                      const url = "tel:112";
+                      launch(url).then((_) {});
+                    },
                     color: Colors.red,
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.center,
