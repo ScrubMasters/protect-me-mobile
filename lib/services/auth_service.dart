@@ -8,6 +8,10 @@ class AuthService {
 
   Future<User> login(String username, String password) async {
     final response = await http.post(_url + "/login", body: {"username": username, "password": password});
+    
+    if (response.statusCode != 200)
+      return null;
+
     return User.fromJson(jsonDecode(response.body)["user"], jsonDecode(response.body)["token"]);
   }
 
