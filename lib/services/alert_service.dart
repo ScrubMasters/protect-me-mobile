@@ -1,5 +1,7 @@
 import 'dart:io';
+import 'package:async/async.dart';
 import 'package:dio/dio.dart';
+import 'package:http_parser/http_parser.dart';
 
 import 'package:protect_me_mobile/environment.dart';
 import 'package:protect_me_mobile/models/alert.dart';
@@ -27,11 +29,11 @@ class AlertService {
   Future<Alert> createWithAudio(Map<String, dynamic> alert, User user) async {
     final audioPath = alert["audioPath"];
     FormData formData = new FormData.from({
-      "severiry": alert["severity"],
+      "severity": alert["severity"],
       "createdBy": alert["createdBy"],
       "latitude": alert["latitude"],
       "longitude": alert["longitude"],
-      "audio": UploadFileInfo(File(alert["audioPath"]), "$audioPath.mp4"),
+      "imageUploads": UploadFileInfo(File(audioPath), "audio_alert.mp4"),
     });
 
     final dio = Dio();
@@ -43,7 +45,7 @@ class AlertService {
     
     if (response.statusCode != 201)
       return null;
-    
-    return Alert.fromJson(jsonDecode(response.data), user);
+
+    return Alert.fromJson(response.data["alert"], user);
   }
 }

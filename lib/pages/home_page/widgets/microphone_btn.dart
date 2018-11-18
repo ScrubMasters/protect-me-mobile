@@ -1,7 +1,12 @@
-import 'package:flutter/cupertino.dart';
+import 'dart:async';
 import 'package:flutter/material.dart';
+import 'package:flutter_sound/flutter_sound.dart';
 
 class MicrophoneButton extends StatefulWidget {
+  final dynamic onRecord;
+
+  MicrophoneButton(this.onRecord);
+  
   @override
   _MicrophoneButtonState createState() => _MicrophoneButtonState();
 }
@@ -10,11 +15,55 @@ class _MicrophoneButtonState extends State<MicrophoneButton> with SingleTickerPr
   
   Animation<double> _animation;   //> This will increment from 0 to 1 progressively
   AnimationController _animationController;
+
+  bool _isRecording = false;
   
-  bool runningAnim = false;
+  StreamSubscription _recorderSubscription;
+  FlutterSound flutterSound;
+
+  String _path = "";
+
+  void startRecorder() async{
+    try {
+      _path = await flutterSound.startRecorder(null);
+      print('startRecorder: $_path');
+      _recorderSubscription = flutterSound.onRecorderStateChanged.listen((e) {
+        this.setState(() {
+        });
+      });
+
+      this.setState(() {
+        this._isRecording = true;
+      });
+    } catch (err) {
+      print('startRecorder error: $err');
+    }
+  }
+
+  void stopRecorder() async{
+    try {
+      String result = await flutterSound.stopRecorder();
+      print('stopRecorder: $result');
+
+      if (_recorderSubscription != null) {
+        _recorderSubscription.cancel();
+        _recorderSubscription = null;
+      }
+
+      this.setState(() {
+        this._isRecording = false;
+      });
+      widget.onRecord(_path);
+    } catch (err) {
+      print('stopRecorder error: $err');
+    }
+  }
 
   @override
   void initState() {
+    flutterSound = new FlutterSound();
+    flutterSound.setSubscriptionDuration(0.01);
+
      _animationController = new AnimationController(
       duration: new Duration(milliseconds: 900),
       vsync: this
@@ -34,12 +83,13 @@ class _MicrophoneButtonState extends State<MicrophoneButton> with SingleTickerPr
     return InkWell(
       borderRadius: BorderRadius.all(Radius.circular(200)),
       onTap: () {
-        if (!runningAnim) {
+        if (!this._isRecording) {
           _animationController.repeat();
-        } else {
-          _animationController.stop();
+          return this.startRecorder();
         }
-        runningAnim = !runningAnim;
+        _animationController.stop();
+        this.stopRecorder();
+        
       },
       child: Container(
         padding: EdgeInsets.all(50 + (20 * _animation.value)),

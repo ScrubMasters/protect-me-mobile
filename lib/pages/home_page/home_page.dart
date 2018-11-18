@@ -25,14 +25,16 @@ class _HomePageState extends State<HomePage> {
               mainAxisAlignment: MainAxisAlignment.center,
               children: <Widget>[
                 UserDisplay(widget.user),
-                MicrophoneButton(),
+                MicrophoneButton((path) {
+                  _createAlertAudio(context, path);
+                }),
                 Padding(padding: EdgeInsets.only(top: 40)),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: <Widget>[
                     AlertButton("LOW", () { _createAlert("LOW", context); }),
-                    AlertButton("MEDIUM", () { _createAlert("LOW", context); }),
-                    AlertButton("HIGH", () { _createAlert("LOW", context); }),
+                    AlertButton("MEDIUM", () { _createAlert("MEDIUM", context); }),
+                    AlertButton("HIGH", () { _createAlert("HIGH", context); }),
                   ],
                 )
               ],
@@ -48,6 +50,31 @@ class _HomePageState extends State<HomePage> {
       (geolocation) {
         AlertService().create({
           "severity": severity,
+          "createdBy": widget.user.id,
+          "latitude": geolocation.latitude.toString(),
+          "longitude": geolocation.longitude.toString()
+        }, widget.user).then(
+          (alert) {
+            if (alert == null) {
+              Scaffold.of(context)
+                .showSnackBar(SnackBar(content: Text('Error sending alert')));
+            } else {
+              Scaffold.of(context)
+                .showSnackBar(SnackBar(content: Text('Alert created')));
+            }
+          }
+        );
+      }
+    );
+    
+  }
+
+  void _createAlertAudio(BuildContext context, String path) {
+    GeolocatorService().getPosition().then(
+      (geolocation) {
+        AlertService().createWithAudio({
+          "severity": "HIGH",
+          "audioPath": path,
           "createdBy": widget.user.id,
           "latitude": geolocation.latitude.toString(),
           "longitude": geolocation.longitude.toString()
