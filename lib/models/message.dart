@@ -13,5 +13,5 @@ class Message {
     : this.from = User.fromDocument(snapshot["from"]), 
       this.to = User.fromDocument(snapshot["to"]),
       this.message = snapshot["message"],
-      this.date = DateTime(snapshot["createdAt"]){ print(to.username + "-" + snapshot["createdAt"].toString()); }
+      this.date = DateTime(snapshot["createdAt"]) { print(to.username + "-" + snapshot["createdAt"].toString()); }
 }

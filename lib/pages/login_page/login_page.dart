@@ -52,7 +52,7 @@ class _LoginPageState extends State<LoginPage> {
                                       .showSnackBar(SnackBar(content: Text('Invalid account')));
                                   } else {
                                     Router.params["user"] = user;
-                                    Navigator.of(context).popAndPushNamed("/home_page"); 
+                                    Navigator.of(context).pushNamed("/home_page"); 
                                   }
                                 }
                               );

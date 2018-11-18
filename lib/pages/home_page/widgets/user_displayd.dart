@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:protect_me_mobile/environment.dart';
 import 'package:protect_me_mobile/models/user.dart';
 
 class UserDisplay extends StatefulWidget {
@@ -22,7 +21,7 @@ class _UserDisplayState extends State<UserDisplay> {
           Container(
             width: 100,
             height: 100,
-            margin: EdgeInsets.only(right: 20),
+            margin: EdgeInsets.only(right: 15),
             decoration: BoxDecoration(
               shape: BoxShape.circle,
               image: new DecorationImage(

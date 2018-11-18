@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:protect_me_mobile/models/user.dart';
 import 'package:protect_me_mobile/pages/home_page/widgets/alert_button.dart';
@@ -16,6 +17,20 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
+  int _notifications;
+
+  @override
+  void initState() {
+    Firestore.instance.collection('messages').snapshots().listen(
+      (QuerySnapshot q) {
+        setState(() {
+          _notifications =  q.documents.length;
+        });
+      }
+    );
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
      return Scaffold(
@@ -29,7 +44,6 @@ class _HomePageState extends State<HomePage> {
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: <Widget>[
                     UserDisplay(widget.user),
-                    Padding(padding: EdgeInsets.only(left: 10),),
                     IconButton(
                       icon: Icon(Icons.chat, size: 40,),
                       onPressed: () {
@@ -37,6 +51,14 @@ class _HomePageState extends State<HomePage> {
                         Navigator.of(context).pushNamed("/chat_page");
                       },
                     ),
+                    Container(
+                      padding: EdgeInsets.all(5),
+                      decoration: BoxDecoration(
+                        color: Colors.red,
+                        shape: BoxShape.circle
+                      ),
+                      child: Text(_notifications.toString(), style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold),),
+                    )
                   ],
                 ),
                 MicrophoneButton((path) {

@@ -19,7 +19,6 @@ class _ChatPageState extends State<ChatPage> {
 
   @override
   void initState() {
-    
     super.initState();
   }
 
@@ -145,49 +144,54 @@ class _ChatPageState extends State<ChatPage> {
   }
 
   Widget _buildInput() {
-    return Form(
-      key: _formKey,
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: <Widget>[
-          Flexible(
-            child: TextFormField(
-              decoration: InputDecoration(
-                hintText: "Message..."
-              ),
-              validator: (value) {
-                if (value.isEmpty) {
-                  return 'Please enter a message';
-                } else {
-                  text = value;
-                }
-              },
-            ),
-          ),
-          Flexible(
-              child: InkWell(
-                borderRadius: BorderRadius.all(Radius.circular(20)),
-                child: Padding(
-                  padding: EdgeInsets.all(20), 
-                  child: Icon(Icons.send, size: 20,),
+    return Padding(
+      padding: EdgeInsets.only(bottom: 0),
+      child:Form(
+        key: _formKey,
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: <Widget>[
+            Flexible(
+              child: TextFormField(
+                decoration: InputDecoration(
+                  hintText: "Message..."
                 ),
-                onTap: () {
-                  if (_formKey.currentState.validate()) {
-                    Firestore.instance.collection('messages').add({
-                      "to": to.toJson(),
-                      "from": widget.currentUser.toJson(),
-                      "message": text,
-                      "createdAt": DateTime.now().toIso8601String()
-                    }).then((_) {
-                      _formKey.currentState.reset();
-                      text = "";
-                    });
+                validator: (value) {
+                  if (value.isEmpty) {
+                    return 'Please enter a message';
+                  } else {
+                    text = value;
                   }
                 },
-              )
+              ),
             ),
-        ],
-      ),
+            Flexible(
+                child: InkWell(
+                  borderRadius: BorderRadius.all(Radius.circular(20)),
+                  child: Padding(
+                    padding: EdgeInsets.all(20), 
+                    child: Icon(Icons.send, size: 20, color: to != null ? Colors.black : Colors.grey,),
+                  ),
+                  onTap: () {
+                    if(to == null) return;
+
+                    if (_formKey.currentState.validate()) {
+                      Firestore.instance.collection('messages').add({
+                        "to": to.toJson(),
+                        "from": widget.currentUser.toJson(),
+                        "message": text,
+                        "createdAt": DateTime.now().toIso8601String()
+                      }).then((_) {
+                        _formKey.currentState.reset();
+                        text = "";
+                      });
+                    }
+                  },
+                )
+              ),
+          ],
+        ),
+      )
     );
   }
 }

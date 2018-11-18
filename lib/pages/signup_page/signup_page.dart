@@ -65,7 +65,7 @@ class _SignupPageState extends State<SignupPage> {
                               }).then(
                                 (user) { 
                                   Router.params["user"] = user;
-                                  Navigator.of(context).popAndPushNamed("/home_page");
+                                  Navigator.of(context).pushNamed("/home_page");
                                 }
                               );
                             }
